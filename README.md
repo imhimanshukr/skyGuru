@@ -1,4 +1,4 @@
-# sky-guru : <a href=""https://skyguru.netlify.app/>Demo</a>
+# sky-guru : <a href="https://skyguru.netlify.app">Demo</a>
 
 ## Project setup
 ```
