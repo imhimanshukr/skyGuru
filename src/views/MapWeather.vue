@@ -40,11 +40,11 @@ export default {
     },
     computed: {
         zoom() {
-            return 10
+            return 5
         },
         center() {
-            return L.latLng(26.1670, 85.8950);
-        },
+    return L.latLng(23.5, 77.5);
+},
         tileLayerUrl() {
             return 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
         },
