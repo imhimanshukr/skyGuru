@@ -1,0 +1,131 @@
+<template>
+    <v-row>
+        <v-col cols="12" md="8">
+            <v-sheet class="pointer secondary-bg rounded-xl py-4 px-5 mb-4 d-flex justify-space-between align-center card-sheet" :class="{active: index === activeIndex}"
+                v-for="(weather, index) in tempCityWeather" :key="weather.city" @click="getMoreInfo(index)">
+                <div class="d-flex align-center">
+                    <img src="../assets/cloud.png" v-if="weather.main.toLowerCase() == 'clouds'" style="width: 80px; height: 80px; padding: 10px;">
+                    <img src="../assets/sun.png" v-if="weather.main.toLowerCase() == 'clear'" style="width: 80px; height: 80px; padding: 10px;">
+                    <img src="../assets/rain.png" v-if="weather.main.toLowerCase() == 'rain'" style="width: 80px; height: 80px; padding: 10px;">
+                    <div class="ml-6">
+                        <h3 class="primary-white fs-28 fw-500 text-capitalize">{{ weather.city }}</h3>
+                        <div class="d-flex align-baseline">
+                            <v-icon class="primary-gray fs-18">mdi-weather-sunset</v-icon>
+                            <p class="ml-1 fs-12 primary-gray text-uppercase">{{ weather.sunset }}</p>
+                        </div>
+                    </div>
+                </div>
+                <h3 class="primary-white fs-32 ff-rubik fw-400">{{ weather.temp + "&deg;" }}</h3>
+            </v-sheet>
+        </v-col>
+        <v-col cols="12" md="4" v-if="this.activePlace.length">
+            <div class="pb-5 d-flex justify-space-between" style="border-bottom: 1px solid #575a5e4d;">
+                <div class="d-flex flex-column justify-space-between">
+                    <div>
+                        <h3 class="primary-white fs-32 text-capitalize">{{ this.activePlace[0].city || "N/A" }}</h3>
+                        <p class="fs-12 primary-gray ff-rubik">Chance of rain: <span>{{ this.activePlace[0].chanceOfRain +" %" || "N/A" }}</span></p>
+                    </div>
+                    <h3 class="primary-white fs-40 ff-rubik fw-600">{{ this.activePlace[0].temp + "&deg;" }}</h3>
+                </div>
+                <img src="../assets/cloud.png" v-if="this.activePlace[0].main.toLowerCase() == 'clouds'" style="width: 120px; height: 120px; padding: 10px;">
+                <img src="../assets/sun.png" v-if="this.activePlace[0].main.toLowerCase() == 'clear'" style="width: 120px; height: 120px; padding: 10px;">
+                <img src="../assets/rain.png" v-if="this.activePlace[0].main.toLowerCase() == 'rain'" style="width: 120px; height: 120px; padding: 10px;">
+            </div>
+            <v-sheet color="transparent" class="mt-4">
+                <p class="fs-12 primary-gray mb-6 text-uppercase ff-rubik fw-500">Today's Forecast</p>
+                <v-row>
+                    <v-col cols="4" class="text-center today-forecast pa-0"
+                        v-for="item in todayForecast" :key="item.time">
+                        <p class="fs-12 primary-gray mb-2 ff-rubik">{{ item.time }}</p>
+                        <img :src="`https://openweathermap.org/img/wn/${item.icon}.png`" alt="" width="40px">
+                        <h3 class="primary-white fs-18 fw-500 ff-rubik">{{ item.temp + "&deg;" }}</h3>
+                    </v-col>
+                </v-row>
+            </v-sheet>
+            <v-sheet class="mt-4">
+                <p class="fs-12 primary-gray mb-3 text-uppercase">3-Day Forecast</p>
+                <v-row cols="12" class="py-2 day-forecast" v-for="item in getSevenDayData" :key="item.day">
+                    <v-col class="d-flex justify-space-between align-center">
+                        <p class="fs-12 primary-gray" style="width:70px;">{{ item.day }}</p>
+                        <div class="d-flex align-center">
+                            <!-- <img src="../assets/sun.png" alt="" width="30px"> -->
+                        <img :src="`https://openweathermap.org/img/wn/${item.icon}.png`" alt="" width="40px">
+                            <p class="fs-12 ml-2 transform-capitalize">{{ item.main }}</p>
+                        </div>
+                        <p class="fs-12">{{ item.temp + "&deg;" }}</p>
+                    </v-col>
+                </v-row>
+            </v-sheet>
+        </v-col>
+    </v-row>
+</template>
+<script>
+import { mapActions } from 'vuex';
+
+export default {
+    data() {
+        return {
+            cityWeather: [],
+            activeIndex: 0,
+            activePlace: [],
+            tempCityWeather: [],
+            todayForecast: [],
+        }
+    },
+    mounted() {
+        this.cityWeather = [];
+        this.searchCity("Patna").then(() => {
+            this.cityWeather.push(this.$store.state.todayHourlyForecast);
+            return this.searchCity("mumbai");
+        }).then(() => {
+            this.cityWeather.push(this.$store.state.todayHourlyForecast);
+            return this.searchCity("hyderabad")
+        }).then(() => {
+            this.cityWeather.push(this.$store.state.todayHourlyForecast);
+            return this.searchCity("Jaipur")
+        }).then(() => {
+            this.cityWeather.push(this.$store.state.todayHourlyForecast);
+            console.log("this.cityWeather: ", this.cityWeather);
+            this.tempCityWeather = this.cityWeather.map((item) => item[0]);
+            this.getMoreInfo(0)
+            console.log("this.tempCityWeather: ", this.tempCityWeather);
+        }).catch(error => {
+            console.log("Error occurred: ", error);
+        });
+    },
+    methods: {
+        ...mapActions(["search", "fetchTodayHourlyForecast"]),
+        searchCity(city) {
+            return new Promise((resolve, reject) => {
+                this.fetchTodayHourlyForecast(city).then(() => {
+                    resolve();
+                }).catch((error) => {
+                    reject(error);
+                });
+            });
+        },
+        getMoreInfo(index){
+            this.activePlace = [];
+            this.activeIndex = index;
+            this.activePlace = this.cityWeather[index];
+            this.todayForecast = this.$store.state.todayHourlyForecast.slice(0,3)
+            console.log("this.activePlace: ", this.activePlace);
+            console.log("this.cityWeather: ", this.cityWeather);
+        }
+    }
+
+}
+</script>
+<style scoped>
+    .card-sheet.active {
+        background-color: transparent !important;
+        border: 1px solid #0461A5;
+    }
+    .today-forecast {
+    border-right: 1px solid #575a5e4d;
+}
+
+.today-forecast:last-child {
+    border-right: none;
+}
+</style>
