@@ -8,10 +8,11 @@ const API_KEY = '59fa2a32c95bd5383cb70966983e457e';
 
 export default new Vuex.Store({
   state: {
-    loggedIn: null,
     searchResult: "",
     todayHourlyForecast: [],
+    todayActiveHourlyForecast: [],
     next7DayForecast: [],
+    nextActive7Forecast: [],
   },
   mutations: {
     SearchResult(state, result){
@@ -20,8 +21,12 @@ export default new Vuex.Store({
     setTodayHourlyForecast(state, todayHourlyForecast) {
       state.todayHourlyForecast = todayHourlyForecast
     },
+    setActiveHourlyForecast(state, todayHourlyForecast) {
+      state.todayActiveHourlyForecast = todayHourlyForecast
+    },
     setNext7DaysForecase(state, forecastData){
-      state.next7DayForecast = forecastData.filter(forecast => {
+      console.log("myName: ", forecastData);
+      const foreCast = forecastData.data.filter(forecast => {
         const forecastDate = new Date(forecast.dt_txt);
         const today = new Date();
         return forecastDate.getHours() === 12 && forecastDate.getDate() >= today.getDate() && forecastDate.getDate() <= today.getDate() + 6;
@@ -35,13 +40,21 @@ export default new Vuex.Store({
           description: forecast.weather[0].description,
           main: forecast.weather[0].main,
           icon: forecast.weather[0].icon,
+          city: forecastData.city,
         };
       });
+      if(forecastData.page === "dashboard") {
+        state.next7DayForecast = foreCast
+      } else {
+        state.nextActive7Forecast = foreCast;
+      }
       console.log("state.next7DayForecast: ", state.next7DayForecast);
+      console.log("state.nextActive7Forecast: ", state.nextActive7Forecast);
     }
   },
   actions: {
     async search({ commit }, city) {
+      try {
       const { data } = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${API_KEY}`)
       const todayForecast = {
         humidity: data.main.humidity,
@@ -55,9 +68,13 @@ export default new Vuex.Store({
       }
       commit("SearchResult",todayForecast)
       console.log("data: ", data);
+    }catch (error) {
+        console.log("err: ", error);
+      }
     },
-    async fetchTodayHourlyForecast({ commit }, city) {
-      const { data } = await axios.get(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=metric&appid=${API_KEY}`)
+    async fetchTodayHourlyForecast({ commit }, payload) {
+      try {
+      const { data } = await axios.get(`https://api.openweathermap.org/data/2.5/forecast?q=${payload.city}&units=metric&appid=${API_KEY}`)
       const hourlyForecast = data.list.slice(0, 6).map(hour => {
         return {
           time: moment(hour.dt_txt, "YYYY-MM-DD HH:mm:ss").format("h:mm A"),
@@ -73,8 +90,16 @@ export default new Vuex.Store({
       })
       console.log("hour: ", data);
       console.log("hForecast: ", hourlyForecast);
-      commit('setTodayHourlyForecast', hourlyForecast);
-      commit('setNext7DaysForecase', data.list)
+      if(payload.page === "dashboard") {
+        commit('setTodayHourlyForecast', hourlyForecast);
+      } else {
+        commit('setActiveHourlyForecast', hourlyForecast);
+      }
+      commit('setNext7DaysForecase', {page: payload.page, data: data.list, city: payload.city})
+    }catch (error) {
+      console.log("err: ", error);
+      // Handle error
+    }
     },
   },
 })

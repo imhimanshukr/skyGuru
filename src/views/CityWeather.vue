@@ -31,7 +31,7 @@
                 <img src="../assets/sun.png" v-if="this.activePlace[0].main.toLowerCase() == 'clear'" style="width: 120px; height: 120px; padding: 10px;">
                 <img src="../assets/rain.png" v-if="this.activePlace[0].main.toLowerCase() == 'rain'" style="width: 120px; height: 120px; padding: 10px;">
             </div>
-            <v-sheet color="transparent" class="mt-4">
+            <v-sheet color="transparent" class="mt-4 pb-12">
                 <p class="fs-12 primary-gray mb-6 text-uppercase ff-rubik fw-500">Today's Forecast</p>
                 <v-row>
                     <v-col cols="4" class="text-center today-forecast pa-0"
@@ -42,13 +42,12 @@
                     </v-col>
                 </v-row>
             </v-sheet>
-            <v-sheet class="mt-4">
-                <p class="fs-12 primary-gray mb-3 text-uppercase">3-Day Forecast</p>
-                <v-row cols="12" class="py-2 day-forecast" v-for="item in getSevenDayData" :key="item.day">
-                    <v-col class="d-flex justify-space-between align-center">
+            <v-sheet color="transparent">
+                <p class="fs-12 primary-gray text-uppercase">3-Day Forecast</p>
+                <v-row cols="12" class="day-forecast" v-for="item in getSevenDayData" :key="item.day">
+                    <v-col class="d-flex justify-space-between align-center px-8 py-2">
                         <p class="fs-12 primary-gray" style="width:70px;">{{ item.day }}</p>
                         <div class="d-flex align-center">
-                            <!-- <img src="../assets/sun.png" alt="" width="30px"> -->
                         <img :src="`https://openweathermap.org/img/wn/${item.icon}.png`" alt="" width="40px">
                             <p class="fs-12 ml-2 transform-capitalize">{{ item.main }}</p>
                         </div>
@@ -70,21 +69,22 @@ export default {
             activePlace: [],
             tempCityWeather: [],
             todayForecast: [],
+            getSevenDayData: [],
         }
     },
     mounted() {
         this.cityWeather = [];
         this.searchCity("Patna").then(() => {
-            this.cityWeather.push(this.$store.state.todayHourlyForecast);
+            this.cityWeather.push(this.$store.state.todayActiveHourlyForecast);
             return this.searchCity("mumbai");
         }).then(() => {
-            this.cityWeather.push(this.$store.state.todayHourlyForecast);
+            this.cityWeather.push(this.$store.state.todayActiveHourlyForecast);
             return this.searchCity("hyderabad")
         }).then(() => {
-            this.cityWeather.push(this.$store.state.todayHourlyForecast);
+            this.cityWeather.push(this.$store.state.todayActiveHourlyForecast);
             return this.searchCity("Jaipur")
         }).then(() => {
-            this.cityWeather.push(this.$store.state.todayHourlyForecast);
+            this.cityWeather.push(this.$store.state.todayActiveHourlyForecast);
             console.log("this.cityWeather: ", this.cityWeather);
             this.tempCityWeather = this.cityWeather.map((item) => item[0]);
             this.getMoreInfo(0)
@@ -97,7 +97,7 @@ export default {
         ...mapActions(["search", "fetchTodayHourlyForecast"]),
         searchCity(city) {
             return new Promise((resolve, reject) => {
-                this.fetchTodayHourlyForecast(city).then(() => {
+                this.fetchTodayHourlyForecast({city, page: "city-weather"}).then(() => {
                     resolve();
                 }).catch((error) => {
                     reject(error);
@@ -108,9 +108,20 @@ export default {
             this.activePlace = [];
             this.activeIndex = index;
             this.activePlace = this.cityWeather[index];
-            this.todayForecast = this.$store.state.todayHourlyForecast.slice(0,3)
-            console.log("this.activePlace: ", this.activePlace);
-            console.log("this.cityWeather: ", this.cityWeather);
+            this.searchCity(this.activePlace[0].city)
+            const prom = new Promise((resolve, reject) => {
+                this.fetchTodayHourlyForecast({city: this.activePlace[0].city, page: "city-weather"}).then(() => {
+                    resolve();
+                }).catch((error) => {
+                    reject(error);
+                });
+            });
+            prom.then(() => {
+                this.getSevenDayData = this.$store.state.nextActive7Forecast.slice(0,3);
+                this.todayForecast = this.$store.state.todayActiveHourlyForecast.slice(0,3);
+            }).catch((err) =>{
+                console.log("err: ", err);
+            })
         }
     }
 
@@ -127,5 +138,12 @@ export default {
 
 .today-forecast:last-child {
     border-right: none;
+}
+.day-forecast {
+    border-bottom: 1px solid #575a5e4d;
+}
+
+.day-forecast:last-child {
+    border-bottom: none;
 }
 </style>

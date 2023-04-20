@@ -1,7 +1,7 @@
 <template>
 	<v-app class="my-background" app>
 		<v-container class="main-container">
-			<v-row class="h-100 ma-0">
+			<v-row class="h-100 ma-0" v-if="isLoogedIn">
 				<v-col cols="1" class="pa-0">
 					<Sidebar />
 				</v-col>
@@ -12,6 +12,9 @@
 					</v-main>
 				</v-col>
 			</v-row>
+			<v-main class="h-100" v-else>
+				<router-view />
+			</v-main>
 		</v-container>
 	</v-app>
 </template>
@@ -27,10 +30,24 @@ export default {
 	data: () => ({
 		//
 	}),
+	created(){
+	},
 	components: {
 		Sidebar,
 		Navbar
-	}
+	},
+	computed:{
+		isLoogedIn(){
+			const isLoggedIn = sessionStorage.getItem("sky-guru-loogedIn")
+			if (!isLoggedIn && this.$route.path !== '/') {
+			this.$router.replace("/")
+			} else if (isLoggedIn && this.$route.path === '/') {
+			this.$router.replace("/dashboard")
+			}
+			return isLoggedIn
+		}
+}
+
 };
 </script>
   

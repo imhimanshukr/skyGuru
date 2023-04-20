@@ -30,8 +30,8 @@ export default {
         }
     },
     mounted(){
-      this.search("Darbhanga");
-      this.fetchTodayHourlyForecast("Darbhanga");
+        this.search("Darbhanga");
+        this.fetchTodayHourlyForecast({city: "Darbhanga", page: "dashboard"});
     },
     methods:{
         ...mapActions(["search", "fetchTodayHourlyForecast"]),
@@ -39,7 +39,7 @@ export default {
     watch: {
         searchCity(city){
             this.search(city);
-            this.fetchTodayHourlyForecast(city);
+            this.fetchTodayHourlyForecast({city, page: "dashboard"});
         }
     }
 }

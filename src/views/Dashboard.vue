@@ -94,11 +94,10 @@
         <v-col cols="12" md="4">
             <v-sheet class="secondary-bg rounded-xl pa-5">
                 <p class="fs-12 primary-gray mb-3 text-uppercase">Upcoming Forecast</p>
-                <v-row cols="12" class="py-2 day-forecast" v-for="item in getSevenDayData" :key="item.day">
+                <v-row cols="12" class="py-2 day-forecast" v-for="item in this.$store.state.next7DayForecast" :key="item.day">
                     <v-col class="d-flex justify-space-between align-center">
                         <p class="fs-12 primary-gray" style="width:70px;">{{ item.day }}</p>
                         <div class="d-flex align-center">
-                            <!-- <img src="../assets/sun.png" alt="" width="30px"> -->
                         <img :src="`https://openweathermap.org/img/wn/${item.icon}.png`" alt="" width="40px">
                             <p class="fs-12 ml-2 transform-capitalize">{{ item.main }}</p>
                         </div>
@@ -115,13 +114,6 @@ export default {
     data: () => ({
         seeMore: false,
     }),
-    computed: {
-        getSevenDayData() {
-            const data = this.$store.state.next7DayForecast;
-            console.log("data: ", data);
-            return data
-        }
-    }
 }
 </script>
 <style scoped>
