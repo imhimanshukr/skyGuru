@@ -23,6 +23,7 @@ export default {
     name: "homePage",
     methods:{
         getStarted(){
+            sessionStorage.setItem("sky-guru-loogedIn", true)
             this.$router.push("/dashboard")
         }
     }

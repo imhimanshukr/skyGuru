@@ -13,6 +13,7 @@ export default new Vuex.Store({
     todayActiveHourlyForecast: [],
     next7DayForecast: [],
     nextActive7Forecast: [],
+    locations: [],
   },
   mutations: {
     SearchResult(state, result){
@@ -25,7 +26,6 @@ export default new Vuex.Store({
       state.todayActiveHourlyForecast = todayHourlyForecast
     },
     setNext7DaysForecase(state, forecastData){
-      console.log("myName: ", forecastData);
       const foreCast = forecastData.data.filter(forecast => {
         const forecastDate = new Date(forecast.dt_txt);
         const today = new Date();
@@ -48,8 +48,9 @@ export default new Vuex.Store({
       } else {
         state.nextActive7Forecast = foreCast;
       }
-      console.log("state.next7DayForecast: ", state.next7DayForecast);
-      console.log("state.nextActive7Forecast: ", state.nextActive7Forecast);
+    },
+    setLocationWeather(state, location) {
+      state.locations.push(location)
     }
   },
   actions: {
@@ -67,7 +68,6 @@ export default new Vuex.Store({
         city: data.name,
       }
       commit("SearchResult",todayForecast)
-      console.log("data: ", data);
     }catch (error) {
         console.log("err: ", error);
       }
@@ -88,8 +88,6 @@ export default new Vuex.Store({
           chanceOfRain: hour.clouds.all
         }
       })
-      console.log("hour: ", data);
-      console.log("hForecast: ", hourlyForecast);
       if(payload.page === "dashboard") {
         commit('setTodayHourlyForecast', hourlyForecast);
       } else {
@@ -98,8 +96,16 @@ export default new Vuex.Store({
       commit('setNext7DaysForecase', {page: payload.page, data: data.list, city: payload.city})
     }catch (error) {
       console.log("err: ", error);
-      // Handle error
     }
     },
+    async fetchWeather({ commit }, location) {
+      const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${location}&units=metric&appid=${API_KEY}`)
+      const data = await response.json()
+      const locationData = {
+        location: location,
+        weather: data,
+      }
+      commit('setLocationWeather', locationData)
+    }
   },
 })

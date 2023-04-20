@@ -76,7 +76,7 @@ export default {
         this.cityWeather = [];
         this.searchCity("Patna").then(() => {
             this.cityWeather.push(this.$store.state.todayActiveHourlyForecast);
-            return this.searchCity("mumbai");
+            return this.searchCity("delhi");
         }).then(() => {
             this.cityWeather.push(this.$store.state.todayActiveHourlyForecast);
             return this.searchCity("hyderabad")

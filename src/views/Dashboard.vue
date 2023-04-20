@@ -41,7 +41,7 @@
                             <v-icon class="primary-gray">mdi-weather-sunny</v-icon>
                             <p class="ml-1 fs-12 primary-gray text-uppercase">Humidity</p>
                         </div>
-                        <p class="fs-20 pl-2 primary-white ff-rubik fw-600">{{ $store.state.searchResult.humidity || "N/A"
+                        <p class="fs-20 pl-2 primary-white ff-rubik fw-600">{{ $store.state.searchResult.humidity+ " %" || "N/A"
                         }}
                         </p>
                     </v-col>
