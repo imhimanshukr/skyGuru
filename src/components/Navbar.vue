@@ -3,11 +3,11 @@
         <v-row>
             <v-col
           cols="11"
-          sm="8"
+          md="8"
           class="pa-0"
         >
           <v-text-field
-            placeholder="Search for cities"
+            placeholder="Search for city"
             filled
             dense
             rounded
@@ -17,6 +17,7 @@
           ></v-text-field>
         </v-col>
       </v-row>
+      <v-app-bar-nav-icon @click.stop="$store.state.drawer = !$store.state.drawer" class="show-on-mobile"></v-app-bar-nav-icon>
         </v-app-bar>
 </template>
 <script>
@@ -29,15 +30,12 @@ export default {
             searchCity: "",
         }
     },
-    mounted(){
-        this.search("Darbhanga");
-        this.fetchTodayHourlyForecast({city: "Darbhanga", page: "dashboard"});
-    },
     methods:{
         ...mapActions(["search", "fetchTodayHourlyForecast"]),
     },
     watch: {
         searchCity(city){
+            this.$store.state.searchedCity = city;
             this.search(city);
             this.fetchTodayHourlyForecast({city, page: "dashboard"});
         }
@@ -59,5 +57,13 @@ export default {
   font-size: 12px;
 }
 
-
+.show-on-mobile{
+    display: none;
+}
+@media screen and (max-width: 600px) {
+    .show-on-mobile{
+        display: block;
+        margin-top: -15px;
+    }
+}
 </style>

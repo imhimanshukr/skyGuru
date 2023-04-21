@@ -6,6 +6,7 @@
                 <div class="d-flex align-center">
                     <img src="../assets/cloud.png" v-if="weather.main.toLowerCase() == 'clouds'" style="width: 80px; height: 80px; padding: 10px;">
                     <img src="../assets/sun.png" v-if="weather.main.toLowerCase() == 'clear'" style="width: 80px; height: 80px; padding: 10px;">
+                    <img src="../assets/moon.png" v-if="$store.state.todayHourlyForecast[0].main.toLowerCase() == 'clear' && !isDayTime" style="height: 120px; padding: 10px" />
                     <img src="../assets/rain.png" v-if="weather.main.toLowerCase() == 'rain'" style="width: 80px; height: 80px; padding: 10px;">
                     <div class="ml-6">
                         <h3 class="primary-white fs-28 fw-500 text-capitalize">{{ weather.city }}</h3>
@@ -15,20 +16,21 @@
                         </div>
                     </div>
                 </div>
-                <h3 class="primary-white fs-32 ff-rubik fw-400">{{ weather.temp + "&deg;" }}</h3>
+                <h3 class="primary-white fs-32 ff-rubik fw-400 text-uppercase">{{ Math.trunc(weather.temp) + "&deg; "+$store.state.tempUnits }}</h3>
             </v-sheet>
         </v-col>
         <v-col cols="12" md="4" v-if="this.activePlace.length">
-            <div class="pb-5 d-flex justify-space-between" style="border-bottom: 1px solid #575a5e4d;">
+            <div class="pb-5 justify-space-between hide-on-tablet" style="border-bottom: 1px solid #575a5e4d; display: flex;">
                 <div class="d-flex flex-column justify-space-between">
                     <div>
                         <h3 class="primary-white fs-32 text-capitalize">{{ this.activePlace[0].city || "N/A" }}</h3>
                         <p class="fs-12 primary-gray ff-rubik">Chance of rain: <span>{{ this.activePlace[0].chanceOfRain +" %" || "N/A" }}</span></p>
                     </div>
-                    <h3 class="primary-white fs-40 ff-rubik fw-600">{{ this.activePlace[0].temp + "&deg;" }}</h3>
+                    <h3 class="primary-white fs-40 ff-rubik fw-600 text-uppercase">{{ Math.trunc(this.activePlace[0].temp) + "&deg; "+$store.state.tempUnits }}</h3>
                 </div>
                 <img src="../assets/cloud.png" v-if="this.activePlace[0].main.toLowerCase() == 'clouds'" style="width: 120px; height: 120px; padding: 10px;">
                 <img src="../assets/sun.png" v-if="this.activePlace[0].main.toLowerCase() == 'clear'" style="width: 120px; height: 120px; padding: 10px;">
+                <img src="../assets/moon.png" v-if="$store.state.todayHourlyForecast[0].main.toLowerCase() == 'clear' && !isDayTime" style="height: 120px; padding: 10px" />
                 <img src="../assets/rain.png" v-if="this.activePlace[0].main.toLowerCase() == 'rain'" style="width: 120px; height: 120px; padding: 10px;">
             </div>
             <v-sheet color="transparent" class="mt-4 pb-12">
@@ -38,7 +40,7 @@
                         v-for="item in todayForecast" :key="item.time">
                         <p class="fs-12 primary-gray mb-2 ff-rubik">{{ item.time }}</p>
                         <img :src="`https://openweathermap.org/img/wn/${item.icon}.png`" alt="" width="40px">
-                        <h3 class="primary-white fs-18 fw-500 ff-rubik">{{ item.temp + "&deg;" }}</h3>
+                        <h3 class="primary-white fs-18 fw-500 ff-rubik text-uppercase">{{ Math.trunc(item.temp) + "&deg; "+$store.state.tempUnits }}</h3>
                     </v-col>
                 </v-row>
             </v-sheet>
@@ -48,10 +50,10 @@
                     <v-col class="d-flex justify-space-between align-center px-8 py-2">
                         <p class="fs-12 primary-gray" style="width:70px;">{{ item.day }}</p>
                         <div class="d-flex align-center">
-                        <img :src="`https://openweathermap.org/img/wn/${item.icon}.png`" alt="" width="40px">
+                        <img :src="`https://openweathermap.org/img/wn/${item.icon}.png`" :style="item.main == 'Clear' || item.main == 'Rain' ? 'margin-right: 10px;': ''" alt="" width="40px">
                             <p class="fs-12 ml-2 transform-capitalize">{{ item.main }}</p>
                         </div>
-                        <p class="fs-12">{{ item.temp + "&deg;" }}</p>
+                        <p class="fs-12 text-uppercase">{{ Math.trunc(item.temp) + "&deg; "+$store.state.tempUnits }}</p>
                     </v-col>
                 </v-row>
             </v-sheet>
@@ -85,10 +87,8 @@ export default {
             return this.searchCity("Jaipur")
         }).then(() => {
             this.cityWeather.push(this.$store.state.todayActiveHourlyForecast);
-            console.log("this.cityWeather: ", this.cityWeather);
             this.tempCityWeather = this.cityWeather.map((item) => item[0]);
             this.getMoreInfo(0)
-            console.log("this.tempCityWeather: ", this.tempCityWeather);
         }).catch(error => {
             console.log("Error occurred: ", error);
         });
@@ -123,8 +123,15 @@ export default {
                 console.log("err: ", err);
             })
         }
+    },
+    computed: {
+        isDayTime() {
+            const date = new Date();
+            const hours = date.getHours();
+            const isDay = hours > 6 && hours < 19;
+            return isDay;
+        }
     }
-
 }
 </script>
 <style scoped>

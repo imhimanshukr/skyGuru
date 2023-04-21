@@ -11,6 +11,9 @@
 .secondary-bg {
     background-color: #202B3B !important;
 }
+.transparent-bg {
+    background-color: transparent !important;
+}
 
 /* font */
 .fs-10 {
@@ -21,6 +24,9 @@
 }
 .fs-14 {
     font-size: 14px !important;
+}
+.fs-16 {
+    font-size: 16px !important;
 }
 .fs-18 {
     font-size: 18px !important;
@@ -85,9 +91,17 @@ body {
     }
 }
 
+@media screen and (max-width: 960px) {
+    .hide-on-tablet {
+        display: none !important;
+    }
+}
 @media screen and (max-width: 600px) {
     .hide-on-mobile {
         display: none;
+    }
+    .show-on-mobile {
+        display: block !important;
     }
 }
 

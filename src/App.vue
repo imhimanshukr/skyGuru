@@ -5,9 +5,9 @@
 				<v-col cols="1" class="pa-0">
 					<Sidebar />
 				</v-col>
-				<v-col cols="11" class="pa-0">
+				<v-col cols="12" sm="11" class="p-responsive">
 					<Navbar />
-					<v-main class="h-100">
+					<v-main class="main-router">
 						<router-view />
 					</v-main>
 				</v-col>
@@ -61,5 +61,33 @@ export default {
 	height: 100vh;
 	padding: 30px;
 	font-family: 'Roboto', sans-serif !important;
+}
+.main-router {
+	overflow-x: hidden;
+    overflow-y: auto;
+    height: calc(100vh - 98px);
+}
+.main-router::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+}
+
+.main-router {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.p-responsive{
+	padding: 0;
+}
+@media screen and (max-width: 1264px) {
+	.p-responsive {
+		padding: 0 15px !important;
+	}
+}
+@media screen and (max-width: 600px) {
+	.main-container {
+		padding: 15px 0;
+	}
 }
 </style>
