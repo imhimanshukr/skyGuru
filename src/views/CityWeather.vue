@@ -1,7 +1,7 @@
 <template>
     <v-row>
         <v-col cols="12" md="8">
-            <v-sheet class="pointer secondary-bg rounded-xl py-4 px-5 mb-4 d-flex justify-space-between align-center card-sheet" :class="{active: index === activeIndex}"
+            <v-sheet class="pointer secondary-bg rounded-xl sheet-padding mb-4 d-flex justify-space-between align-center card-sheet" :class="{active: index === activeIndex}"
                 v-for="(weather, index) in tempCityWeather" :key="weather.city" @click="getMoreInfo(index)">
                 <div class="d-flex align-center">
                     <img src="../assets/cloud.png" v-if="weather.main.toLowerCase() == 'clouds'" style="width: 80px; height: 80px; padding: 10px;">
@@ -152,5 +152,17 @@ export default {
 
 .day-forecast:last-child {
     border-bottom: none;
+}
+.sheet-padding{
+    padding: 15px;
+}
+@media screen and (max-width: 600px) {
+    .fs-32{
+        font-size: 25px !important;
+    }
+    .sheet-padding{
+        padding: 5px 15px;
+        padding-left: 0;
+    }
 }
 </style>

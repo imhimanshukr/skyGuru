@@ -78,15 +78,12 @@ methods:{
 }
 @media screen and (max-width: 600px) {
 .responsive {
-    height: 95% !important;
+    height: calc(100vh - 80px) !important;
     z-index: 9999;
     position: absolute !important;
     top: 0px !important;
     margin: 10px !important;
-    -webkit-box-shadow: -1px 4px 11px 3px rgba(32,43,59,1);
--moz-box-shadow: -1px 4px 11px 3px rgba(32,43,59,1);
-box-shadow: -1px 4px 11px 3px rgba(32,43,59,1);
-    /* width: 50px !important; */
+    box-shadow: 0 0 0px 0 rgba(32, 43, 59, 0.5), 0 0 0 5px rgba(32, 43, 59, 0.2);
 }
 .responsive-drawer-false {
     transform: translateX(0) !important;

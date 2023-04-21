@@ -1,7 +1,7 @@
 <template>
 	<v-app class="my-background" app>
 		<v-container class="main-container">
-			<v-row class="h-100 ma-0" v-if="isLoogedIn">
+			<v-row class="ma-0" v-if="isLoogedIn">
 				<v-col cols="1" class="pa-0">
 					<Sidebar />
 				</v-col>
@@ -88,6 +88,9 @@ export default {
 @media screen and (max-width: 600px) {
 	.main-container {
 		padding: 15px 0;
+	}
+	.main-router{
+		height: calc(100vh - 130px) !important;
 	}
 }
 </style>
