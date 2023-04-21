@@ -5,9 +5,9 @@
                 v-for="(weather, index) in tempCityWeather" :key="weather.city" @click="getMoreInfo(index)">
                 <div class="d-flex align-center">
                     <img src="../assets/cloud.png" v-if="weather.main.toLowerCase() == 'clouds'" style="width: 80px; height: 80px; padding: 10px;">
-                    <img src="../assets/sun.png" v-if="weather.main.toLowerCase() == 'clear'" style="width: 80px; height: 80px; padding: 10px;">
-                    <img src="../assets/moon.png" v-if="$store.state.todayHourlyForecast[0].main.toLowerCase() == 'clear' && !isDayTime" style="height: 120px; padding: 10px" />
-                    <img src="../assets/rain.png" v-if="weather.main.toLowerCase() == 'rain'" style="width: 80px; height: 80px; padding: 10px;">
+                    <img src="../assets/sun.png" v-else-if="weather.main.toLowerCase() == 'clear' && isDayTime" style="width: 80px; height: 80px; padding: 10px;">
+                    <img src="../assets/moon.png" v-else-if="$store.state.todayHourlyForecast[0].main.toLowerCase() == 'clear' && !isDayTime" style="height: 120px; padding: 10px" />
+                    <img src="../assets/rain.png" v-else-if="weather.main.toLowerCase() == 'rain'" style="width: 80px; height: 80px; padding: 10px;">
                     <div class="ml-6">
                         <h3 class="primary-white fs-28 fw-500 text-capitalize">{{ weather.city }}</h3>
                         <div class="d-flex align-baseline">
@@ -29,9 +29,9 @@
                     <h3 class="primary-white fs-40 ff-rubik fw-600 text-uppercase">{{ Math.trunc(this.activePlace[0].temp) + "&deg; "+$store.state.tempUnits }}</h3>
                 </div>
                 <img src="../assets/cloud.png" v-if="this.activePlace[0].main.toLowerCase() == 'clouds'" style="width: 120px; height: 120px; padding: 10px;">
-                <img src="../assets/sun.png" v-if="this.activePlace[0].main.toLowerCase() == 'clear'" style="width: 120px; height: 120px; padding: 10px;">
-                <img src="../assets/moon.png" v-if="$store.state.todayHourlyForecast[0].main.toLowerCase() == 'clear' && !isDayTime" style="height: 120px; padding: 10px" />
-                <img src="../assets/rain.png" v-if="this.activePlace[0].main.toLowerCase() == 'rain'" style="width: 120px; height: 120px; padding: 10px;">
+                <img src="../assets/sun.png" v-else-if="this.activePlace[0].main.toLowerCase() == 'clear' && isDayTime" style="width: 120px; height: 120px; padding: 10px;">
+                <img src="../assets/moon.png" v-else-if="$store.state.todayHourlyForecast[0].main.toLowerCase() == 'clear' && !isDayTime" style="height: 120px; padding: 10px" />
+                <img src="../assets/rain.png" v-else-if="this.activePlace[0].main.toLowerCase() == 'rain'" style="width: 120px; height: 120px; padding: 10px;">
             </div>
             <v-sheet color="transparent" class="mt-4 pb-12">
                 <p class="fs-12 primary-gray mb-6 text-uppercase ff-rubik fw-500">Today's Forecast</p>

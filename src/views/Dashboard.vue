@@ -24,11 +24,11 @@
                 </div>
                 <img src="../assets/cloud.png" v-if="$store.state.todayHourlyForecast[0].main.toLowerCase() == 'clouds'
                         " style="width: 140px; height: 140px; padding: 10px" />
-                <img src="../assets/sun.png" v-if="$store.state.todayHourlyForecast[0].main.toLowerCase() == 'clear' && $store.state.isDay
-                        " style="width: 140px; height: 140px; padding: 10px" />
-                <img src="../assets/moon.png" v-if="$store.state.todayHourlyForecast[0].main.toLowerCase() == 'clear' && !$store.state.isDay
+                <img src="../assets/sun.png" v-else-if="$store.state.todayHourlyForecast[0].main.toLowerCase() == 'clear' && $store.state.isDay
+                        " style="width: 130px; height: 130px; padding: 10px" />
+                <img src="../assets/moon.png" v-else-if="$store.state.todayHourlyForecast[0].main.toLowerCase() == 'clear' && !$store.state.isDay
                         " style="height: 120px; padding: 10px" />
-                <img src="../assets/rain.png" v-if="$store.state.todayHourlyForecast[0].main.toLowerCase() == 'rain'
+                <img src="../assets/rain.png" v-else-if="$store.state.todayHourlyForecast[0].main.toLowerCase() == 'rain'
                         " style="width: 140px; height: 140px; padding: 10px" />
             </div>
             <v-sheet color="#202B3B" class="rounded-xl pa-5 mt-5 pb-8">
