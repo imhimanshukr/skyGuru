@@ -34,10 +34,13 @@ export default {
         ...mapActions(["search", "fetchTodayHourlyForecast"]),
     },
     watch: {
-        searchCity(city){
+        searchCity(city){ 
             this.$store.state.searchedCity = city;
             this.search(city);
             this.fetchTodayHourlyForecast({city, page: "dashboard"});
+            if(this.$route.path !== '/dashboard'){
+              this.$router.replace("/dashboard")
+            }
         }
     }
 }

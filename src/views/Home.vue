@@ -13,7 +13,7 @@
                 <img src="../../public/favicon.png" alt="" width="60px" class="mb-5">
                 <h2 class="fs-40 fw-600">SkyGuru</h2>
                 <p class="primary-gray">Weather App</p>
-                <v-btn rounded class="primary-bg fs-10 mt-4" @click="getStarted">Get started</v-btn>
+                <v-btn rounded class="primary-bg fs-10 mt-8" @click="getStarted">Get started</v-btn>
             </div>
         </v-col>
     </v-row>

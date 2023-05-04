@@ -24,12 +24,14 @@
                 </div>
                 <img src="../assets/cloud.png" v-if="$store.state.todayHourlyForecast[0].main.toLowerCase() == 'clouds'
                         " style="width: 140px; height: 140px; padding: 10px" />
-                <img src="../assets/sun.png" v-else-if="$store.state.todayHourlyForecast[0].main.toLowerCase() == 'clear' && $store.state.isDay
-                        " style="width: 130px; height: 130px; padding: 10px" />
-                <img src="../assets/moon.png" v-else-if="$store.state.todayHourlyForecast[0].main.toLowerCase() == 'clear' && !$store.state.isDay
-                        " style="height: 120px; padding: 10px" />
+                <img src="../assets/sun.png" v-else-if="$store.state.todayHourlyForecast[0].main.toLowerCase() == 'clear' &&
+                    $store.state.isDay
+                    " style="width: 130px; height: 130px; padding: 10px" />
+                <img src="../assets/moon.png" v-else-if="$store.state.todayHourlyForecast[0].main.toLowerCase() == 'clear' &&
+                    !$store.state.isDay
+                    " style="height: 120px; padding: 10px" />
                 <img src="../assets/rain.png" v-else-if="$store.state.todayHourlyForecast[0].main.toLowerCase() == 'rain'
-                        " style="width: 140px; height: 140px; padding: 10px" />
+                    " style="width: 140px; height: 140px; padding: 10px" />
             </div>
             <v-sheet color="#202B3B" class="rounded-xl pa-5 mt-5 pb-8">
                 <p class="fs-12 primary-gray mb-6 text-uppercase ff-rubik fw-500">
@@ -41,7 +43,7 @@
                         <p class="fs-12 primary-gray mb-2 ff-rubik">{{ item.time }}</p>
                         <img :src="`https://openweathermap.org/img/wn/${item.icon}.png`" alt="" width="40px" />
                         <h3 class="primary-white fs-18 ff-rubik text-uppercase">
-                            {{ Math.trunc(item.temp) + "&deg; "+$store.state.tempUnits }}
+                            {{ Math.trunc(item.temp) + "&deg; " + $store.state.tempUnits }}
                         </h3>
                     </v-col>
                 </v-row>
@@ -136,7 +138,8 @@
                     <v-col class="d-flex justify-space-between align-center">
                         <p class="fs-12 primary-gray" style="width: 70px">{{ item.day }}</p>
                         <div class="d-flex align-center">
-                            <img :src="`https://openweathermap.org/img/wn/${item.icon}.png`" alt="" width="40px" :style="item.main == 'Clear' ? 'margin-right: 10px;': ''" />
+                            <img :src="`https://openweathermap.org/img/wn/${item.icon}.png`" alt="" width="40px"
+                                :style="item.main == 'Clear' ? 'margin-right: 10px;' : ''" />
                             <p class="fs-12 ml-2 transform-capitalize">{{ item.main }}</p>
                         </div>
                         <p class="fs-12 text-uppercase">

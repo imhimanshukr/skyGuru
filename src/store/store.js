@@ -8,7 +8,7 @@ const API_KEY = '59fa2a32c95bd5383cb70966983e457e';
 
 export default new Vuex.Store({
   state: {
-    searchedCity: "Darbhanga",
+    searchedCity: "Delhi",
     searchResult: "",
     todayHourlyForecast: [],
     todayActiveHourlyForecast: [],
