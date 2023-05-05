@@ -6,7 +6,7 @@
                 <div class="d-flex align-center">
                     <img src="../assets/cloud.png" v-if="weather.main.toLowerCase() == 'clouds'" style="width: 80px; height: 80px; padding: 10px;">
                     <img src="../assets/sun.png" v-else-if="weather.main.toLowerCase() == 'clear' && isDayTime" style="width: 80px; height: 80px; padding: 10px;">
-                    <img src="../assets/moon.png" v-else-if="$store.state.todayHourlyForecast[0].main.toLowerCase() == 'clear' && !isDayTime" style="height: 120px; padding: 10px" />
+                    <img src="../assets/moon.png" v-else-if="weather.main.toLowerCase() == 'clear' && !isDayTime" style="height:80px; padding: 10px 0;margin-left: -11px;" />
                     <img src="../assets/rain.png" v-else-if="weather.main.toLowerCase() == 'rain'" style="width: 80px; height: 80px; padding: 10px;">
                     <div class="ml-6">
                         <h3 class="primary-white fs-28 fw-500 text-capitalize">{{ weather.city }}</h3>
@@ -30,7 +30,7 @@
                 </div>
                 <img src="../assets/cloud.png" v-if="this.activePlace[0].main.toLowerCase() == 'clouds'" style="width: 120px; height: 120px; padding: 10px;">
                 <img src="../assets/sun.png" v-else-if="this.activePlace[0].main.toLowerCase() == 'clear' && isDayTime" style="width: 120px; height: 120px; padding: 10px;">
-                <img src="../assets/moon.png" v-else-if="$store.state.todayHourlyForecast[0].main.toLowerCase() == 'clear' && !isDayTime" style="height: 120px; padding: 10px" />
+                <img src="../assets/moon.png" v-else-if="this.activePlace[0].main.toLowerCase() == 'clear' && !isDayTime" style="120px;height: 120px; padding: 0 0px 20px 0;" />
                 <img src="../assets/rain.png" v-else-if="this.activePlace[0].main.toLowerCase() == 'rain'" style="width: 120px; height: 120px; padding: 10px;">
             </div>
             <v-sheet color="transparent" class="mt-4 pb-12">
